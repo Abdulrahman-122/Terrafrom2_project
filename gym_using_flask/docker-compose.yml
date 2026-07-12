@@ -1,11 +1,14 @@
 services:
   flask:
     build: .
+    env_file:
+      - .env
     container_name: Flask_backend
     ports:
       - "5000:5000"
     environment:
-      DATABASE_URL: mysql+pymysql://maria:Appsecrets@mariadb/My_maria
+      # DATABASE_URL: mysql+pymysql://maria:Appsecrets@mariadb/My_maria
+      DATABASE_URL: mysql+pymysql://${db_username}:${db_password}@${db_endpoint}/${db_name}
       FLASK_APP: run.py
 
     depends_on:
@@ -21,22 +24,22 @@ services:
     depends_on:
       - flask
 
-  mariadb:
+  # mariadb:
      
-    image: mariadb:latest
-    healthcheck:
-      test: ["CMD" , "mariadb-admin","ping","-h","127.0.0.1","-u","root","-p$1234Root"]
-      interval: 20s
-      timeout: 10s
-      retries: 5
-    container_name: database_maria
-    environment:
-      MYSQL_ROOT_PASSWORD: 1234Root
-      MYSQL_DATABASE: My_maria
-      MYSQL_USER: maria
-      MYSQL_PASSWORD: Appsecrets
-    volumes:
-      - maria_data:/var/lib/mysql
+  #   image: mariadb:latest
+  #   healthcheck:
+  #     test: ["CMD" , "mariadb-admin","ping","-h","127.0.0.1","-u","root","-p$1234Root"]
+  #     interval: 20s
+  #     timeout: 10s
+  #     retries: 5
+  #   container_name: database_maria
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 1234Root
+  #     MYSQL_DATABASE: My_maria
+  #     MYSQL_USER: maria
+  #     MYSQL_PASSWORD: Appsecrets
+  #   volumes:
+  #     - maria_data:/var/lib/mysql
 
 volumes:
    maria_data:  

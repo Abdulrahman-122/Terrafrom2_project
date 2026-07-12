@@ -72,6 +72,14 @@ def login():
         'message': 'Invalid email or password'
     }), 401
 
+@app.route("/health",methods=["GET"])
+@login_required
+def healthy():
+    return jsonify({
+        "status":"healthy"
+    }),200
+
+
 @app.route('/home', methods=['GET'])
 @login_required
 def home():
