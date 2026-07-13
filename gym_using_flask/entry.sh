@@ -1,6 +1,5 @@
 #!/bin/bash
-echo "sleeping 10 s untill the database boots"
-sleep 10 
+
 # Create migrations only once
 if [ ! -d "migrations" ]; then
     echo "Initializing migrations..."
