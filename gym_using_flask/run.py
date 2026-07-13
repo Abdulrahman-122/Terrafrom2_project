@@ -8,7 +8,7 @@ from datetime import date
 
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json(silent=True)
     if not data:
@@ -49,7 +49,7 @@ def register():
     return jsonify({'message': 'User registered successfully'}), 201
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
 
@@ -72,7 +72,7 @@ def login():
         'message': 'Invalid email or password'
     }), 401
 
-@app.route("/health",methods=["GET"])
+@app.route("/api/health",methods=["GET"])
 @login_required
 def healthy():
     return jsonify({
@@ -80,7 +80,7 @@ def healthy():
     }),200
 
 
-@app.route('/home', methods=['GET'])
+@app.route('/api/home', methods=['GET'])
 @login_required
 def home():
     trainer_name = 'Not assigned'
@@ -114,7 +114,7 @@ def home():
         'schedule': [{'day': s.day, 'workout': s.workout} for s in schedule]
     }), 200
 
-@app.route('/checkin', methods=['POST'])
+@app.route('/api/checkin', methods=['POST'])
 @login_required
 def checkin():
     current_user.status = 'in_gym'
@@ -130,7 +130,7 @@ def checkout():
     return jsonify({'message': 'Checked out!', 'status': 'not_in_gym'}), 200
 
 
-@app.route('/nutrition', methods=['POST'])
+@app.route('/api/nutrition', methods=['POST'])
 @login_required
 def log_nutrition():
     data     = request.json
@@ -162,7 +162,7 @@ def log_nutrition():
     return jsonify({'message': 'Nutrition logged!'}), 200
 
 
-@app.route('/trainers', methods=['GET'])
+@app.route('/api/trainers', methods=['GET'])
 @login_required
 def get_trainers():
     trainers = Trainer.query.all()
@@ -179,7 +179,7 @@ def get_trainers():
     }), 200
 
 
-@app.route('/assign_trainer', methods=['POST'])
+@app.route('/api/assign_trainer', methods=['POST'])
 @login_required
 def assign_trainer():
     data       = request.json
@@ -208,7 +208,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/profile', methods=['GET'])
+@app.route('/api/profile', methods=['GET'])
 @login_required
 def get_profile():
     trainer_name = 'Not assigned'
@@ -225,7 +225,7 @@ def get_profile():
     }), 200
 
 
-@app.route('/profile/upload', methods=['POST'])
+@app.route('/api/profile/upload', methods=['POST'])
 @login_required
 def upload_profile_image():
     if 'image' not in request.files:
@@ -241,7 +241,7 @@ def upload_profile_image():
     return jsonify({'message': 'Image uploaded!', 'image_file': filename}), 200
 
 
-@app.route('/static/profiles/<filename>')
+@app.route('/api/static/profiles/<filename>')
 def profile_image(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
